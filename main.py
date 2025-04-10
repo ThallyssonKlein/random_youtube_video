@@ -1,13 +1,14 @@
-https://www.youtube.com/@oprogramadordesucesso
-
-# Instale antes: pip install google-api-python-client
-
 import random
+import os
+from dotenv import load_dotenv
 from googleapiclient.discovery import build
 
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
 # Substitua pela sua chave de API e ID do canal:
-API_KEY = "SUA_CHAVE_DE_API"
-CHANNEL_ID = "ID_DO_CANAL"
+API_KEY = os.getenv("API_KEY")
+CHANNEL_ID = os.getenv("CHANNEL_ID")
 
 def sortear_video_do_canal():
     youtube = build("youtube", "v3", developerKey=API_KEY)
