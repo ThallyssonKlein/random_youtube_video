@@ -6,17 +6,35 @@ from googleapiclient.discovery import build
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
 
-# Substitua pela sua chave de API e ID do canal:
-API_KEY = os.getenv("API_KEY")
-CHANNEL_ID = os.getenv("CHANNEL_ID")
+# Dicionário com os canais disponíveis
+CANAIS = {
+    "1": {
+        "nome": "Programador de Sucesso",
+        "id": "UCHgQAOkK8EPR01C6VgN6Kzg"  # Substitua pelo ID real do canal
+    },
+}
 
-def sortear_video_do_canal():
+# Substitua pela sua chave de API:
+API_KEY = os.getenv("API_KEY")
+
+def selecionar_canal():
+    print("\nCanais disponíveis:")
+    for chave, canal in CANAIS.items():
+        print(f"{chave} - {canal['nome']}")
+    
+    while True:
+        escolha = input("\nDigite o número do canal desejado: ")
+        if escolha in CANAIS:
+            return CANAIS[escolha]["id"]
+        print("Opção inválida! Tente novamente.")
+
+def sortear_video_do_canal(channel_id):
     youtube = build("youtube", "v3", developerKey=API_KEY)
 
     # Define a busca inicial (máximo de 50 resultados por consulta)
     request = youtube.search().list(
         part="snippet",
-        channelId=CHANNEL_ID,
+        channelId=channel_id,
         maxResults=50,
         order="date"
     )
@@ -35,4 +53,5 @@ def sortear_video_do_canal():
         print(f"Vídeo sorteado: https://www.youtube.com/watch?v={escolhido}")
 
 if __name__ == "__main__":
-    sortear_video_do_canal()
+    channel_id = selecionar_canal()
+    sortear_video_do_canal(channel_id)
